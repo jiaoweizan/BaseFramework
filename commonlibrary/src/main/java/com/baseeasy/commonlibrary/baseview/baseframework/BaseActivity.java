@@ -1,10 +1,14 @@
 package com.baseeasy.commonlibrary.baseview.baseframework;
 
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+
 import com.alibaba.android.arouter.launcher.ARouter;
+import com.apkfuns.logutils.LogUtils;
 import com.baseeasy.commonlibrary.basemvp.IBaseView;
 import com.baseeasy.commonlibrary.basemvp.psenter.BasePresenter;
 import com.baseeasy.commonlibrary.eventbus.EventBusUtils;
@@ -16,6 +20,9 @@ import com.trello.rxlifecycle2.components.support.RxAppCompatActivity;
 import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 
+import java.lang.reflect.ParameterizedType;
+import java.lang.reflect.Type;
+
 /**
  * 作者：WangZhiQiang
  * 时间：2019/3/14
@@ -26,25 +33,33 @@ public   abstract class BaseActivity<V extends IBaseView,T extends BasePresenter
 
     public String  TAG="";
     public T presenter;
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ARouter.getInstance().inject(this);
+
         TAG="BaseLog:"+this.getLocalClassName();
+        if(this instanceof  BaseDataBinDingActivity){
 
-        setContentView(setContentViewId());
-        init_view();
-
-        presenter=createPresenter();
-        if(presenter!=null){
-            presenter.attachView((V) this);
-
-            createPresenterComplete(true);
         }else {
-            createPresenterComplete(false);
+            ARouter.getInstance().inject(this);
+            setContentView(setContentViewId());
+            init_view();
+            presenter=createPresenter();
+            if(presenter!=null){
+                presenter.attachView((V) this);
+                createPresenterComplete(true);
+            }else {
+                createPresenterComplete(false);
+            }
+            init_data();
         }
-        init_data();
+
 
     }
+
+
+
+
     protected  abstract int   setContentViewId();
     public void init_view(){};
     public void init_data(){};
@@ -90,7 +105,6 @@ public   abstract class BaseActivity<V extends IBaseView,T extends BasePresenter
         }
 
     }
-
 
 
 }

@@ -24,11 +24,18 @@
     android {    
             defaultConfig {
                  ..........
+              //在app 和 mode 的build.gradle 下的defaultConfig里面添加
+
                 ndk {
                     abiFilters "armeabi"    //添加ndk支持
                 }        
                  ..........
-            }    
+            }  
+            //所有使用到网络请求的mode都要添加        
+            compileOptions {
+                sourceCompatibility JavaVersion.VERSION_1_8
+                targetCompatibility JavaVersion.VERSION_1_8
+             }   
            greendao {
                 schemaVersion 1
                 daoPackage 'XXXXX'//greendao //路径
@@ -36,7 +43,7 @@
             }
              }
            dependencies {
-               implementation 'com.github.ZhetengDashen:BaseFramework:2.0'
+               implementation 'com.github.ZhetengDashen:BaseFramework:2.0.7'
             }  
  ``` 
 ######  
